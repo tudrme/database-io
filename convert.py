@@ -24,6 +24,7 @@ next_id = generate()
 data['tutors'][next_id] = {}
 
 name = contents[0][2:len(contents[0]) - 1]
+print('Now processing: ' + name)
 data['tutors'][next_id]['name'] = name
 
 style_index = contents.index('## Teaching Style\n') + 2
@@ -42,6 +43,10 @@ data['tutors'][next_id]['bio']['experience'] = experience[0:len(experience) - 2]
 split_name = name.split(' ')
 data['tutors'][next_id]['lastname'] = split_name[1]
 
-print(name)
+drive_index = contents[11].find("Drives?") + 16
+does_drive = contents[11][drive_index:drive_index + 3]
+drives = does_drive == "Yes"
+data['tutors'][next_id]['info'] = {}
+data['tutors'][next_id]['info']['drives'] = drives
 
 print(json.dumps(data, indent = 2))
