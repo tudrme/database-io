@@ -65,7 +65,13 @@ for filename in os.listdir(home + profiles):
     data['tutors'][next_id]['info'] = {}
     data['tutors'][next_id]['info']['drives'] = drives
 
-    # Do something about price
+    # Gets the price
+    price_index = contents[8].find("Price") + 17
+    try:
+        price = int(contents[8][price_index:price_index + 2])
+    except:
+        price = 0
+    data['tutors'][next_id]['info']['price'] = price
 
     # Gets whether they're willing to negotiate the price
     negotiable = contents[9].find('Negotiable') != -1
