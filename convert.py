@@ -76,4 +76,13 @@ for x in range(start_index, end_index):
     subjects.append(contents[x][2:end_subject].strip())
 data['tutors'][next_id]['info']['subjectnames'] = subjects
 
+# Gets their first name
+data['tutors'][next_id]['firstname'] = split_name[0]
+
+# Adds their ID
+data['tutors'][next_id]['id'] = next_id
+
+# Adds their city
+
+
 print(json.dumps(data, indent = 2))
