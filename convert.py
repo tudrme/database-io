@@ -23,7 +23,7 @@ contents = file.readlines()
 next_id = generate()
 data['tutors'][next_id] = {}
 
-name = contents[0][2:len(contents) - 2]
+name = contents[0][2:len(contents[0]) - 1]
 data['tutors'][next_id]['name'] = name
 
 style_index = contents.index('## Teaching Style\n') + 2
@@ -39,6 +39,9 @@ experience_index = contents.index('## Experience\n') + 2
 experience = contents[experience_index]
 data['tutors'][next_id]['bio']['experience'] = experience[0:len(experience) - 2]
 
-print(experience)
+split_name = name.split(' ')
+data['tutors'][next_id]['lastname'] = split_name[1]
+
+print(name)
 
 print(json.dumps(data, indent = 2))
