@@ -49,4 +49,11 @@ drives = does_drive == "Yes"
 data['tutors'][next_id]['info'] = {}
 data['tutors'][next_id]['info']['drives'] = drives
 
+# Do something about price
+
+negotiable = contents[9].find('Negotiable') != -1
+data['tutors'][next_id]['info']['negotiable'] = negotiable
+
+# Do something about availability
+
 print(json.dumps(data, indent = 2))
