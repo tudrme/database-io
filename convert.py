@@ -31,7 +31,14 @@ style = contents[style_index]
 data['tutors'][next_id]['bio'] = {}
 data['tutors'][next_id]['bio']['style'] = style
 
+description_index = contents.index('## Experience\n') - 2
+description = contents[description_index]
+data['tutors'][next_id]['bio']['description'] = description[0:len(description) - 2]
 
-print(style)
+experience_index = contents.index('## Experience\n') + 2
+experience = contents[experience_index]
+data['tutors'][next_id]['bio']['experience'] = experience[0:len(experience) - 2]
+
+print(experience)
 
 print(json.dumps(data, indent = 2))
