@@ -23,14 +23,13 @@ data['tutors'] = {}
 
 for filename in os.listdir(home + profiles):
     # Open the tutor v1 file and read it
-    file = open(home + profiles + filename, "r")
+    file = open(home + profiles + filename, "r", encoding = "utf8")
     contents = file.readlines()
     named_file = filename[0:len(filename) - 2]
-    print(named_file)
 
     # Generate a tutor v2 ID
     next_id = generate()
-    copyfile(home + images + named_file + "jpg", "exports/images/" + next_id + "jpg")
+    copyfile(home + images + named_file + "jpg", "exports/images/" + next_id + ".jpg")
     data['tutors'][next_id] = {}
 
     # Get the name
@@ -66,9 +65,9 @@ for filename in os.listdir(home + profiles):
     data['tutors'][next_id]['info']['drives'] = drives
 
     # Gets the price
-    price_index = contents[8].find("Price") + 17
+    price_index = contents[9].find("Price") + 17
     try:
-        price = int(contents[8][price_index:price_index + 2])
+        price = int(contents[9][price_index:price_index + 2])
     except:
         price = 0
     data['tutors'][next_id]['info']['price'] = price
@@ -77,7 +76,58 @@ for filename in os.listdir(home + profiles):
     negotiable = contents[9].find('Negotiable') != -1
     data['tutors'][next_id]['info']['negotiable'] = negotiable
 
-    # Do something about availability
+    # Gets the availability... kind of
+    availability_index = contents[8].find("Availability") + 16
+    availability_string = contents[8][availability_index:len(contents[8]) - 2]
+    dash = availability_string.find("-")
+    m = False
+    tu = False
+    wed = False
+    th = False
+    f = False
+    if (availability_string.find("M") != -1):
+        m = True
+    if (availability_string.find("Tu") != -1):
+        tu = True
+    if (availability_string.find("W") != -1):
+        wed = True
+    if (availability_string.find("Th") != -1):
+        th = True
+    if (availability_string.find("F") != -1):
+        f = True
+    if (dash != -1):
+        begin = 1
+        end = 5
+        if (availability_string[0:1] == "T"):
+            begin = 2 if availability_string[1:2] == "u" else 4
+        elif (availability_string[0:1] == "W"):
+            begin = 3
+        else:
+            begin = 5
+        if (availability_string[dash + 1:dash + 2] == "T"):
+            begin = 2 if availability_string[dash + 2:dash + 3] == "u" else 4
+        elif (availability_string[1:2] == "W"):
+            end = 3
+        if (begin == end or begin > end):
+            print("Your program goofed, person: " + name)
+        for day in range(begin, end):
+            if (day == 1):
+                m = True
+            elif (day == 2):
+                tu = True
+            elif (day == 3):
+                wed = True
+            elif (day == 4):
+                th = True
+            elif (day == 5):
+                f = True
+    data['tutors'][next_id]['info']['availability'] = {}
+    data['tutors'][next_id]['info']['availability']['days'] = {}
+    data['tutors'][next_id]['info']['availability']['days']['_mon'] = m
+    data['tutors'][next_id]['info']['availability']['days']['_tues'] = tu
+    data['tutors'][next_id]['info']['availability']['days']['_wed'] = wed
+    data['tutors'][next_id]['info']['availability']['days']['_thurs'] = th
+    data['tutors'][next_id]['info']['availability']['days']['_fri'] = f
 
     # Gets their subjects
     start_index = 8
@@ -104,8 +154,6 @@ for filename in os.listdir(home + profiles):
     location_index = contents[8].find("Location") + 16
     location = contents[8][location_index:len(contents[8]) - 2].strip()
     data['tutors'][next_id]['location']['school'] = location
-
-print(json.dumps(data, indent = 2))
 
 with open('exports/firebase.json', 'w+') as outfile:
     json.dump(data, outfile)
