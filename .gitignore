@@ -2,3 +2,4 @@ imports
 exports
 .vscode
 Tutors.csv
+__pycache__
