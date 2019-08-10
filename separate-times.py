@@ -1,3 +1,7 @@
+"""
+Seaprate out the times in the CSV file
+"""
+
 import csv
 
 with open('yeet_out.csv', mode = 'w') as output:
